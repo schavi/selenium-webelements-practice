@@ -15,6 +15,9 @@ class TestTheInternetPageFirefox:
 
     def setup_method(self):
         self.page = TheInternetPage(chosen_browser="firefox")
+
+        self.page.browser.implicitly_wait(7)
+
         self.page.open()
 
     def teardown_method(self):
@@ -27,8 +30,3 @@ class TestTheInternetPageFirefox:
             print(link.text)
 
 
-
-instance = TestTheInternetPageFirefox()
-instance.setup_method()
-instance.test_links()
-instance.teardown_method()

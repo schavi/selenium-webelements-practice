@@ -13,5 +13,5 @@ class TheInternetPage(GeneralPage):
 
     
 
-    def links(self) -> list:
+    def links(self) -> list[WebElement]:
         return self.browser.find_elements(By.XPATH, "//ul//a")
