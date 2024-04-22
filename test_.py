@@ -26,7 +26,14 @@ class TestTheInternetPageFirefox:
     
 
     def test_links(self):
-        for link in self.page.links():
+        for link in self.page.main_links():
             print(link.text)
+
+    
+
+    def test_basic_auth(self):
+        #load http://admin:admin@url then click on link and check if autenthicated
+        #confirmation popups will come up that need to be handled
+        pass
 
 
