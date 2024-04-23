@@ -15,8 +15,9 @@ class TheInternetPage(GeneralPage):
 
     
 
-    def main_links(self) -> list[WebElement]:
-        return self.browser.find_elements(By.XPATH, "//ul//a")
+    def main_links(self) -> tuple[list[str],list[WebElement]]:
+        link_elements = self.browser.find_elements(By.XPATH, "//ul//a")
+        return ([element.text for element in link_elements], link_elements)
 
 
     #A-B testing
@@ -80,10 +81,10 @@ class TheInternetPage(GeneralPage):
         return self.browser.find_element(By.XPATH, "//div[@id='column-b']")
     
     def drag_and_drop_content_A(self) -> str:
-        return self.drag_and_drop_div_A.find_element(By.XPATH, "/header") #./header or its fine this way?
+        return self.drag_and_drop_div_A().find_element(By.XPATH, "./header").text
 
     def drag_and_drop_content_B(self) -> str:
-        return self.drag_and_drop_div_B.find_element(By.XPATH, "/header")
+        return self.drag_and_drop_div_B().find_element(By.XPATH, "./header").text
 
 
     
