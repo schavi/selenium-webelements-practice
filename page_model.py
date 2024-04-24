@@ -1,10 +1,10 @@
 
-from general_page import GeneralPage
-from selenium.webdriver.common.by import By
 
+from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.select import Select
 
+from general_page import GeneralPage
 
 
 
@@ -20,7 +20,7 @@ class TheInternetPage(GeneralPage):
         return ([element.text for element in link_elements], link_elements)
 
 
-    #A-B testing
+    # A-B testing
 
 
     def add_remove_add_button(self) -> WebElement:
@@ -30,11 +30,32 @@ class TheInternetPage(GeneralPage):
         return self.browser.find_elements(By.XPATH, "//button[@onclick='deleteElement()']")
 
 
-    #Basic auth
+    
+    def basic_auth_success_mesage(self) -> str:
+        return self.browser.find_element(By.XPATH, "//div[@class='example']//p").text
 
-    #Broken images
 
-    #Challenging dom
+    # Broken images
+
+
+    def challenging_dom_blue_button(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//div[@class='row']//div[@class='large-2 columns']//a[1]")
+
+    def challenging_dom_red_button(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//div[@class='row']//div[@class='large-2 columns']//a[2]")
+
+    def challenging_dom_green_button(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//div[@class='row']//div[@class='large-2 columns']//a[3]")
+
+    def challenging_dom_table_header(self) -> list[str]:
+        return [element.text for element in self.browser.find_elements(By.XPATH, "//div[@class='row']//div[@class='large-10 columns']//thead//th")]
+    
+    def challenging_dom_table_content(self) -> list[list[str]]:
+        no_of_rows = len(self.browser.find_elements(By.XPATH, "//div[@class='row']//div[@class='large-10 columns']//tbody//tr"))
+        content = []
+        for i in range(no_of_rows):
+            content.append([element.text for element in self.browser.find_elements(By.XPATH, f"//div[@class='row']//div[@class='large-10 columns']//tbody//tr[{i+1}]/td")])
+        return content
 
 
     def checkboxes_1_checkbox(self) -> WebElement:
@@ -49,7 +70,7 @@ class TheInternetPage(GeneralPage):
         return self.browser.find_element(By.XPATH, "//div[@id='hot-spot']")
 
 
-    #Digest auth
+    # Digest auth
 
 
     def disappearing_elements_home_link(self) -> WebElement:
@@ -95,73 +116,54 @@ class TheInternetPage(GeneralPage):
         return self.browser.find_elements(By.XPATH, "//option")
 
 
-    #Dynamic content
+    # Dynamic content
 
-
-    def dynamic_controls_checkbox(self) -> WebElement:
-        return self.browser.find_element(By.XPATH, "//form[@id='checkbox-example']//input[@type='checkbox']")
+    # Dynamic controls
     
-    def dynamic_controls_remove_button(self) -> WebElement:
-        element_text = "Remove"
-        return self.browser.find_element(By.XPATH, f"//form[@id='checkbox-example']//button[text()='{element_text}']")
+    # Dynamic loading
 
-    def dynamic_controls_add_button(self) -> WebElement:
-        element_text = "Add"
-        return self.browser.find_element(By.XPATH, f"//form[@id='checkbox-example']//button[text()='{element_text}']")
+    # Entry ad--TODO----NEXT--
 
-    def dynamic_controls_textfield(self) -> WebElement:
-        return self.browser.find_element(By.XPATH, "//form[@id='input-example']//input[@type='text']")
-    
-    def dynamic_controls_enable_button(self) -> WebElement:
-        element_text = "Enable"
-        return self.browser.find_element(By.XPATH, f"//form[@id='input-example']//button[text()='{element_text}']")
-
-    def dynamic_controls_disable_button(self) -> WebElement:
-        element_text = "Disable"
-        return self.browser.find_element(By.XPATH, f"//form[@id='input-example']//button[text()='{element_text}']")
+    # Exit intent
 
     
-    #Dynamic loading
+    def file_download_links(self) -> list[WebElement]:
+        return self.browser.find_elements(By.XPATH, "//div[@class='example']//a")
 
-    #Entry ad
 
-    #Exit intent
-
-    #File download
-
-    #File upload
+    # File upload--TODO--
 
     # Floating Menu
 
     # Forgot Password
 
-    # Form Authentication
+    # Form Authentication--TODO----NEXT--
 
-    # Frames
+    # Frames--TODO----NEXT--
 
     # Geolocation
 
-    # Horizontal Slider
+    # Horizontal Slider--TODO----NEXT--
 
-    # Hovers
+    # Hovers--TODO--
 
-    # Infinite Scroll
+    # Infinite Scroll--TODO--
 
     # Inputs
 
-    # JQuery UI Menus
+    # JQuery UI Menus--TODO--
 
-    # JavaScript Alerts
+    # JavaScript Alerts--TODO--
 
     # JavaScript onload event error
 
-    # Key Presses
+    # Key Presses--TODO----NEXT--
 
     # Large & Deep DOM
 
-    # Multiple Windows
+    # Multiple Windows--TODO----NEXT--
 
-    # Nested Frames
+    # Nested Frames--TODO----NEXT--
 
     # Notification Messages
 
@@ -169,11 +171,11 @@ class TheInternetPage(GeneralPage):
 
     # Secure File Download
 
-    # Shadow DOM
+    # Shadow DOM--TODO--
 
     # Shifting Content
 
-    # Slow Resources
+    # Slow Resources--TODO--
 
     # Sortable Data Tables
 
@@ -181,5 +183,5 @@ class TheInternetPage(GeneralPage):
 
     # Typos
 
-    # WYSIWYG Editor
+    # WYSIWYG Editor--TODO--
 
