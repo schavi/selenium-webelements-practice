@@ -37,6 +37,7 @@ class TestTheInternetPageFirefox:
     # A-B testing
 
 
+    # Add/Remove Elements
     def test_add_remove(self):
         link_text = "Add/Remove Elements"
         self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
@@ -51,6 +52,7 @@ class TestTheInternetPageFirefox:
         assert len(self.page.add_remove_delete_buttons()) == 0, "Added elements not removed"
 
 
+    # Basic Auth
     @pytest.mark.parametrize("username, password, valid", [("admin", "admin", True),
                                                            ("invalid", "invalid", False)
                                                           ])
@@ -66,6 +68,7 @@ class TestTheInternetPageFirefox:
     # Broken images
 
 
+    # Challenging DOM
     def test_challenging_dom_buttons(self):
         link_text = "Challenging DOM"
         self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
@@ -90,6 +93,7 @@ class TestTheInternetPageFirefox:
         print("\n")
 
 
+    # Checkboxes
     def test_checkboxes(self):
         link_text = "Checkboxes"
         self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
@@ -101,6 +105,7 @@ class TestTheInternetPageFirefox:
         assert self.page.checkboxes_2_checkbox().get_attribute("checked") == None, "Couldn't uncheck checkbox 2"
 
     
+    # Context Menu
     def test_context_menu(self):
         link_text = "Context Menu"
         self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
@@ -117,6 +122,7 @@ class TestTheInternetPageFirefox:
     # Disappearing elements
 
 
+    # Drag and Drop
     def test_drag_and_drop(self):
         link_text = "Drag and Drop"
         self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
@@ -128,6 +134,7 @@ class TestTheInternetPageFirefox:
         assert self.page.drag_and_drop_content_B() == "A", "Content should be 'A'"
 
     
+    # Dropdown
     def test_dropdown_list(self):
         link_text = "Dropdown"
         self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
@@ -143,11 +150,19 @@ class TestTheInternetPageFirefox:
 
     # Dynamic loading
 
-    # Entry ad--TODO----NEXT--
+
+    # Entry ad
+    def test_entry_ad(self):
+        link_text = "Entry Ad"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        assert self.page.entry_ad_window_is_visible(), "Couldn't locate ad window"
+        self.page.entry_ad_close().click()
+        assert not self.page.entry_ad_window_is_visible(), "The ad window didn't close"
 
     # Exit intent
 
 
+    # File Download
     def test_file_download(self):
         link_text = "File Download"
         self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()

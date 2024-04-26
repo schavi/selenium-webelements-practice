@@ -3,6 +3,8 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 from general_page import GeneralPage
 
@@ -23,6 +25,7 @@ class TheInternetPage(GeneralPage):
     # A-B testing
 
 
+    # Add/Remove Elements
     def add_remove_add_button(self) -> WebElement:
         return self.browser.find_element(By.XPATH, "//button[@onclick='addElement()']")
 
@@ -30,7 +33,7 @@ class TheInternetPage(GeneralPage):
         return self.browser.find_elements(By.XPATH, "//button[@onclick='deleteElement()']")
 
 
-    
+    # Basic Auth
     def basic_auth_success_mesage(self) -> str:
         return self.browser.find_element(By.XPATH, "//div[@class='example']//p").text
 
@@ -38,6 +41,7 @@ class TheInternetPage(GeneralPage):
     # Broken images
 
 
+    # Challenging DOM
     def challenging_dom_blue_button(self) -> WebElement:
         return self.browser.find_element(By.XPATH, "//div[@class='row']//div[@class='large-2 columns']//a[1]")
 
@@ -58,6 +62,7 @@ class TheInternetPage(GeneralPage):
         return content
 
 
+    # Checkboxes
     def checkboxes_1_checkbox(self) -> WebElement:
         return self.browser.find_element(By.XPATH, "//form[@id='checkboxes']/input[@type='checkbox']")
     
@@ -65,36 +70,17 @@ class TheInternetPage(GeneralPage):
         return self.browser.find_element(By.XPATH, "//form[@id='checkboxes']/input[@type='checkbox'][2]")
 
 
-    
+    # Context Menu
     def context_menu_hotspot(self) -> WebElement:
         return self.browser.find_element(By.XPATH, "//div[@id='hot-spot']")
 
 
     # Digest auth
 
-
-    def disappearing_elements_home_link(self) -> WebElement:
-        element_text = "Home"
-        return self.browser.find_element(By.XPATH, f"//a[text()='{element_text}']")
-    
-    def disappearing_elements_about_link(self) -> WebElement:
-        element_text = "About"
-        return self.browser.find_element(By.XPATH, f"//a[text()='{element_text}']")
-    
-    def disappearing_elements_contact_link(self) -> WebElement:
-        element_text = "Contact Us"
-        return self.browser.find_element(By.XPATH, f"//a[text()='{element_text}']")
-    
-    def disappearing_elements_portfolio_link(self) -> WebElement:
-        element_text = "Portfolio"
-        return self.browser.find_element(By.XPATH, f"//a[text()='{element_text}']")
-    
-    def disappearing_elements_gallery_link(self) -> WebElement:
-        element_text = "Gallery"
-        return self.browser.find_element(By.XPATH, f"//a[text()='{element_text}']")
-    
+    # Disappearing Elements
 
 
+    # Drag and Drop
     def drag_and_drop_div_A(self) -> WebElement:
         return self.browser.find_element(By.XPATH, "//div[@id='column-a']")
 
@@ -108,7 +94,7 @@ class TheInternetPage(GeneralPage):
         return self.drag_and_drop_div_B().find_element(By.XPATH, "./header").text
 
 
-    
+    # Dropdown
     def dropdown_select(self) -> Select:
         return Select(self.browser.find_element(By.XPATH, "//select"))
     
@@ -122,11 +108,21 @@ class TheInternetPage(GeneralPage):
     
     # Dynamic loading
 
-    # Entry ad--TODO----NEXT--
+    # Entry ad
+    def entry_ad_window_is_visible(self) -> bool:
+        try:
+            WebDriverWait(self.browser, 1).until(EC.visibility_of_element_located((By.XPATH, "//div[@id='modal']")))
+        except:
+            return False
+        return True
+
+    def entry_ad_close(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//div[@class='modal-footer']")
 
     # Exit intent
 
     
+    # File Download
     def file_download_links(self) -> list[WebElement]:
         return self.browser.find_elements(By.XPATH, "//div[@class='example']//a")
 
