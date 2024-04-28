@@ -10,6 +10,8 @@ from selenium.common.exceptions import NoAlertPresentException
 import pytest
 
 from random import choice as randomchoice
+from os import getcwd
+from time import sleep
 
 
 
@@ -79,7 +81,6 @@ class TestTheInternetPageFirefox:
         assert self.page.challenging_dom_blue_button().value_of_css_property("background-color") == blue_button_color
         assert self.page.challenging_dom_red_button().value_of_css_property("background-color") == red_button_color
         assert self.page.challenging_dom_green_button().value_of_css_property("background-color") == green_button_color
-
 
     def test_challenging_dom_table_contents(self):
         link_text = "Challenging DOM"
@@ -155,7 +156,16 @@ class TestTheInternetPageFirefox:
 
     # File Download
 
-    # File upload--TODO--
+
+    # File Upload
+    def test_file_upload(self):
+        link_text = "File Upload"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        filename = "file_for_upload_test.jpg"
+        self.page.file_upload_file_input().send_keys(getcwd() + "\\assets\\" + filename)
+        self.page.file_upload_upload_button().click()
+        assert self.page.file_upload_uploaded_filename() == filename, "File upload failed"
+
 
     # Floating Menu
 
@@ -236,31 +246,80 @@ class TestTheInternetPageFirefox:
         assert self.page.hovers_names()[1].is_displayed(), "Info wasn't displayed on hover"
 
 
-    # Infinite Scroll--TODO--
+    # Infinite Scroll
+    def test_infinite_scroll(self):
+        link_text = "Infinite Scroll"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        amount_of_content_shown = len(self.page.infinite_scroll_content())
+        for i in range(3):
+            self.page.browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            sleep(0.5)
+            assert len(self.page.infinite_scroll_content()) > amount_of_content_shown, f"No additional content appeared ({i+1}. scrolling)"
+            amount_of_content_shown = len(self.page.infinite_scroll_content())
+
+
 
     # Inputs
 
     # JQuery UI Menus--TODO--
 
-    # JavaScript Alerts--TODO--
+
+    # JavaScript Alerts
+    def test_javascript_alert(self):
+        link_text = "JavaScript Alerts"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        self.page.javascript_alerts_alert_button().click()
+        try:
+            self.page.browser.switch_to.alert.accept()
+            assert self.page.javascript_alerts_result() == "You successfully clicked an alert", "The correct result message wasn't shown"
+        except:
+            assert False, "Alert wasn't found"
+
+
+    def test_javascript_confirm(self):
+        link_text = "JavaScript Alerts"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        self.page.javascript_alerts_confirm_button().click()
+        try:
+            self.page.browser.switch_to.alert.accept()
+            assert self.page.javascript_alerts_result() == "You clicked: Ok", "The correct result message wasn't shown"
+        except:
+            assert False, "Alert wasn't found"
+        self.page.javascript_alerts_confirm_button().click()
+        try:
+            self.page.browser.switch_to.alert.dismiss()
+            assert self.page.javascript_alerts_result() == "You clicked: Cancel", "The correct result message wasn't shown"
+        except:
+            assert False, "Alert wasn't found"
+
+    def test_javascript_prompt(self):
+        link_text = "JavaScript Alerts"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        self.page.javascript_alerts_prompt_button().click()
+        string_to_send = "Abcde"
+        try:
+            self.page.browser.switch_to.alert.send_keys(string_to_send)
+            self.page.browser.switch_to.alert.accept()
+            assert self.page.javascript_alerts_result() == f"You entered: {string_to_send}", "The correct result message wasn't shown"
+        except:
+            assert False, "Alert wasn't found"
+
 
     # JavaScript onload event error
 
 
-    # Key Presses
-    def test_key_presses(self):
+    # Key Presses - TODO parametrize
+    @pytest.mark.parametrize("input, result",[("abc", "C"),
+                                              (Keys.BACK_SPACE, "BACK_SPACE"),
+                                              (Keys.ARROW_LEFT, "LEFT"),
+                                              (Keys.F1, "F1"),
+                                              (".", "PERIOD"),
+                                             ])
+    def test_key_presses(self,input,result:str):
         link_text = "Key Presses"
         self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
-        self.page.key_presses_input().send_keys("abc")
-        assert self.page.key_presses_result() == "C", "Didn't return correct keypress (letters)"
-        self.page.key_presses_input().send_keys(Keys.BACK_SPACE)
-        assert self.page.key_presses_result() == "BACK_SPACE", "Didn't return correct keypress (special)"
-        self.page.key_presses_input().send_keys(Keys.ARROW_LEFT)
-        assert self.page.key_presses_result() == "LEFT", "Didn't return correct keypress (navigation)"
-        self.page.key_presses_input().send_keys(Keys.F1)
-        assert self.page.key_presses_result() == "F1", "Didn't return correct keypress (function)"
-        self.page.key_presses_input().send_keys(".")
-        assert self.page.key_presses_result() == "PERIOD", "Didn't return correct keypress (punctuation)"
+        self.page.key_presses_input().send_keys(input)
+        assert self.page.key_presses_result() == result, "Didn't return correct keypress"
 
 
     # Large & Deep DOM

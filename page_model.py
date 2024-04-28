@@ -113,7 +113,17 @@ class TheInternetPage(GeneralPage):
     
     # File Download
 
-    # File upload--TODO--
+
+    # File upload
+    def file_upload_file_input(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//input[@id='file-upload']")
+    
+    def file_upload_upload_button(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//input[@id='file-submit']")
+    
+    def file_upload_uploaded_filename(self) -> str:
+        return self.browser.find_element(By.XPATH, "//div[@id='uploaded-files']").text
+
 
     # Floating Menu
 
@@ -199,13 +209,30 @@ class TheInternetPage(GeneralPage):
     def hovers_names(self) -> list[WebElement]:
         return self.browser.find_elements(By.XPATH, "//div[@class='figcaption']/h5")
 
-    # Infinite Scroll--TODO--
+
+    # Infinite Scroll
+    def infinite_scroll_content(self) -> list[WebElement]:
+        return self.browser.find_elements(By.XPATH, "//div[@class='jscroll-added']")
+
 
     # Inputs
 
     # JQuery UI Menus--TODO--
 
-    # JavaScript Alerts--TODO--
+
+    # JavaScript Alerts
+    def javascript_alerts_alert_button(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//button[@onclick='jsAlert()']")
+    
+    def javascript_alerts_confirm_button(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//button[@onclick='jsConfirm()']")
+    
+    def javascript_alerts_prompt_button(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//button[@onclick='jsPrompt()']")
+    
+    def javascript_alerts_result(self) -> str:
+        return self.browser.find_element(By.XPATH, "//p[@id='result']").text
+
 
     # JavaScript onload event error
 
