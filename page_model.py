@@ -79,19 +79,7 @@ class TheInternetPage(GeneralPage):
 
     # Disappearing Elements
 
-
     # Drag and Drop
-    def drag_and_drop_div_A(self) -> WebElement:
-        return self.browser.find_element(By.XPATH, "//div[@id='column-a']")
-
-    def drag_and_drop_div_B(self) -> WebElement:
-        return self.browser.find_element(By.XPATH, "//div[@id='column-b']")
-    
-    def drag_and_drop_content_A(self) -> str:
-        return self.drag_and_drop_div_A().find_element(By.XPATH, "./header").text
-
-    def drag_and_drop_content_B(self) -> str:
-        return self.drag_and_drop_div_B().find_element(By.XPATH, "./header").text
 
 
     # Dropdown
@@ -108,6 +96,7 @@ class TheInternetPage(GeneralPage):
     
     # Dynamic loading
 
+
     # Entry ad
     def entry_ad_window_is_visible(self) -> bool:
         try:
@@ -119,13 +108,10 @@ class TheInternetPage(GeneralPage):
     def entry_ad_close(self) -> WebElement:
         return self.browser.find_element(By.XPATH, "//div[@class='modal-footer']")
 
-    # Exit intent
 
+    # Exit intent
     
     # File Download
-    def file_download_links(self) -> list[WebElement]:
-        return self.browser.find_elements(By.XPATH, "//div[@class='example']//a")
-
 
     # File upload--TODO--
 
@@ -133,15 +119,85 @@ class TheInternetPage(GeneralPage):
 
     # Forgot Password
 
-    # Form Authentication--TODO----NEXT--
 
-    # Frames--TODO----NEXT--
+    # Form Authentication
+    def form_auth_username(self) -> str:
+        return self.browser.find_element(By.XPATH, "//h4//em[1]").text
+
+    def form_auth_password(self) -> str:
+        return self.browser.find_element(By.XPATH, "//h4//em[2]").text
+
+    def form_auth_username_field(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//input[@id='username']")
+
+    def form_auth_password_field(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//input[@id='password']")
+
+    def form_auth_login_button(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//button[@type='submit']")
+    
+    def form_auth_login_alert_status(self) -> str:
+        '''
+        Returns "success" or "error".
+        '''
+
+        # The class of this element is either "flash success" or "flash error"
+        return self.browser.find_element(By.XPATH, "//div[@id='flash']").get_attribute("class")[6:]
+
+    def form_auth_logout_button(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//a[@href='/logout']")
+
+
+    # Frames
+    def frames_nested_frames_link(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//a[@href='/nested_frames']")
+    
+    def frames_iframe_link(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//a[@href='/iframe']")
+    
+    def frames_nested_top(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//frame[@src='/frame_top']")
+    
+    def frames_nested_top_left(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//frame[@src='/frame_left']")
+    
+    def frames_nested_top_middle(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//frame[@src='/frame_middle']")
+    
+    def frames_nested_top_right(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//frame[@src='/frame_right']")
+    
+    def frames_nested_bottom(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//frame[@src='/frame_bottom']")
+
+    def frames_iframe_editor_iframe(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//div[@class='example']//div[@class='tox-edit-area']/iframe")
+    
+    def frames_iframe_editor_content(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//p")
+
 
     # Geolocation
 
-    # Horizontal Slider--TODO----NEXT--
 
-    # Hovers--TODO--
+    # Horizontal Slider
+    def horizontal_slider_slider(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//input[@type='range']")
+    
+    def horizontal_slider_value(self) -> float:
+        '''
+        Returns a value from {0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5}. 
+        '''
+
+        return float(self.browser.find_element(By.XPATH, "//span[@id='range']").text)
+
+
+    # Hovers
+    def hovers_images(self) -> list[WebElement]:
+        return self.browser.find_elements(By.XPATH, "//div[@class='example']//img")
+    
+    def hovers_names(self) -> list[WebElement]:
+        return self.browser.find_elements(By.XPATH, "//div[@class='figcaption']/h5")
 
     # Infinite Scroll--TODO--
 
@@ -153,13 +209,25 @@ class TheInternetPage(GeneralPage):
 
     # JavaScript onload event error
 
-    # Key Presses--TODO----NEXT--
+
+    # Key Presses
+    def key_presses_input(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//input[@id='target']")
+    
+    def key_presses_result(self) -> str:
+        # Text of this element is "You entered: {Key}"
+        return self.browser.find_element(By.XPATH, "//p[@id='result']").text[13:]
+    
 
     # Large & Deep DOM
 
-    # Multiple Windows--TODO----NEXT--
 
-    # Nested Frames--TODO----NEXT--
+    # Multiple Windows
+    def multple_windows_new_window_link(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//a[text()='Click Here']")
+
+
+    # Nested Frames - this exists under Frames
 
     # Notification Messages
 

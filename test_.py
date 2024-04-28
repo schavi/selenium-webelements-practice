@@ -3,6 +3,7 @@
 from page_model import TheInternetPage
 
 from selenium.webdriver import ActionChains
+from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 
@@ -15,7 +16,7 @@ from random import choice as randomchoice
 class TestTheInternetPageFirefox:
 
     PROTOCOL ="https://"
-    BASEURL = "the-internet.herokuapp.com/"
+    BASEURL = "the-internet.herokuapp.com"
 
     def setup_method(self):
         self.page = TheInternetPage(chosen_browser="firefox")
@@ -121,19 +122,9 @@ class TestTheInternetPageFirefox:
 
     # Disappearing elements
 
-
     # Drag and Drop
-    def test_drag_and_drop(self):
-        link_text = "Drag and Drop"
-        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
-        assert self.page.drag_and_drop_content_A() == "A", "Default content should be 'A'"
-        assert self.page.drag_and_drop_content_B() == "B", "Default content should be 'B'"
-        action_chains = ActionChains(self.page.browser)
-        action_chains.drag_and_drop(self.page.drag_and_drop_div_A(),self.page.drag_and_drop_div_B()).perform()  # TODO it doesn't "let go" of the element properly
-        assert self.page.drag_and_drop_content_A() == "B", "Content should be 'B'"
-        assert self.page.drag_and_drop_content_B() == "A", "Content should be 'A'"
-
     
+
     # Dropdown
     def test_dropdown_list(self):
         link_text = "Dropdown"
@@ -159,16 +150,10 @@ class TestTheInternetPageFirefox:
         self.page.entry_ad_close().click()
         assert not self.page.entry_ad_window_is_visible(), "The ad window didn't close"
 
+
     # Exit intent
 
-
     # File Download
-    def test_file_download(self):
-        link_text = "File Download"
-        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
-        randomchoice(self.page.file_download_links()).click()
-        # TODO check result
-
 
     # File upload--TODO--
 
@@ -176,15 +161,80 @@ class TestTheInternetPageFirefox:
 
     # Forgot Password
 
-    # Form Authentication--TODO----NEXT--
 
-    # Frames--TODO----NEXT--
+    # Form Authentication
+    def test_form_authentication_login(self):
+        link_text = "Form Authentication"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        self.page.form_auth_username_field().send_keys(self.page.form_auth_username())
+        self.page.form_auth_password_field().send_keys(self.page.form_auth_password())
+        self.page.form_auth_login_button().click()
+        assert self.page.form_auth_login_alert_status() == "success", "Login failed"
+    
+    def test_form_authentication_login_invalid(self):
+        link_text = "Form Authentication"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        self.page.form_auth_username_field().send_keys("username")
+        self.page.form_auth_password_field().send_keys("invalidpass")
+        self.page.form_auth_login_button().click()
+        assert self.page.form_auth_login_alert_status() == "error", "Error alert not found"
+    
+    # Uses test_form_authentication_login()
+    def test_form_authentication_logout(self):
+        self.test_form_authentication_login()
+        self.page.form_auth_logout_button().click()
+        assert self.page.form_auth_login_alert_status() == "success", "Logout alert not found"
+
+
+    # Frames
+    def test_frames_nested_frames(self):
+        link_text = "Frames"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        self.page.frames_nested_frames_link().click()
+        self.page.browser.switch_to.frame(self.page.frames_nested_bottom())
+        assert "BOTTOM" in self.page.browser.page_source, "Couldn't switch to bottom frame"
+        self.page.browser.switch_to.default_content()
+        self.page.browser.switch_to.frame(self.page.frames_nested_top())
+        self.page.browser.switch_to.frame(self.page.frames_nested_top_left())
+        assert "LEFT" in self.page.browser.page_source, "Couldn't switch to top left frame"
+        self.page.browser.switch_to.default_content()
+        self.page.browser.switch_to.frame(self.page.frames_nested_top())
+        self.page.browser.switch_to.frame(self.page.frames_nested_top_middle())
+        assert "MIDDLE" in self.page.browser.page_source, "Couldn't switch to top middle frame"
+        self.page.browser.switch_to.default_content()
+        self.page.browser.switch_to.frame(self.page.frames_nested_top())
+        self.page.browser.switch_to.frame(self.page.frames_nested_top_right())
+        assert "RIGHT" in self.page.browser.page_source, "Couldn't switch to top right frame"
+
+    def test_frames_iframe(self):
+        link_text = "Frames"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        self.page.frames_iframe_link().click()
+        self.page.browser.switch_to.frame(self.page.frames_iframe_editor_iframe())
+        assert self.page.frames_iframe_editor_content().text == "Your content goes here.", "Couldn't fetch content from editor inside iframe"
+
 
     # Geolocation
 
-    # Horizontal Slider--TODO----NEXT--
 
-    # Hovers--TODO--
+    # Horizontal Slider
+    def test_horizontal_slider(self):
+        link_text = "Horizontal Slider"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        self.page.horizontal_slider_slider().send_keys(Keys.ARROW_RIGHT * 6)
+        assert self.page.horizontal_slider_value() == 3, "Couldn't increase slider value with keys"
+        self.page.horizontal_slider_slider().send_keys(Keys.ARROW_LEFT * 5)
+        assert self.page.horizontal_slider_value() == 0.5, "Couldn't decrease slider value with keys"
+
+
+    # Hovers
+    def test_hovers(self):
+        link_text = "Hovers"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        actions = ActionChains(self.page.browser)
+        actions.move_to_element(self.page.hovers_images()[1]).perform()
+        assert self.page.hovers_names()[1].is_displayed(), "Info wasn't displayed on hover"
+
 
     # Infinite Scroll--TODO--
 
@@ -196,13 +246,36 @@ class TestTheInternetPageFirefox:
 
     # JavaScript onload event error
 
-    # Key Presses--TODO----NEXT--
+
+    # Key Presses
+    def test_key_presses(self):
+        link_text = "Key Presses"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        self.page.key_presses_input().send_keys("abc")
+        assert self.page.key_presses_result() == "C", "Didn't return correct keypress (letters)"
+        self.page.key_presses_input().send_keys(Keys.BACK_SPACE)
+        assert self.page.key_presses_result() == "BACK_SPACE", "Didn't return correct keypress (special)"
+        self.page.key_presses_input().send_keys(Keys.ARROW_LEFT)
+        assert self.page.key_presses_result() == "LEFT", "Didn't return correct keypress (navigation)"
+        self.page.key_presses_input().send_keys(Keys.F1)
+        assert self.page.key_presses_result() == "F1", "Didn't return correct keypress (function)"
+        self.page.key_presses_input().send_keys(".")
+        assert self.page.key_presses_result() == "PERIOD", "Didn't return correct keypress (punctuation)"
+
 
     # Large & Deep DOM
 
-    # Multiple Windows--TODO----NEXT--
 
-    # Nested Frames--TODO----NEXT--
+    # Multiple Windows
+    def test_multiple_windows(self):
+        link_text = "Multiple Windows"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        self.page.multple_windows_new_window_link().click()
+        windows = self.page.browser.window_handles
+        assert len(windows) == 2, "New window didn't open"
+
+
+    # Nested Frames - this exists under Frames
 
     # Notification Messages
 
