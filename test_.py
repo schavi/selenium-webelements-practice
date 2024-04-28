@@ -4,15 +4,11 @@ from page_model import TheInternetPage
 
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import NoAlertPresentException
 
 import pytest
 
-from random import choice as randomchoice
 from os import getcwd
 from time import sleep
-
 
 
 class TestTheInternetPageFirefox:
@@ -31,11 +27,6 @@ class TestTheInternetPageFirefox:
         self.page.close()
 
     
-
-    def test_links(self):
-        for link in self.page.main_links():
-            print(link.text)
-
     
     # A-B testing
 
@@ -258,10 +249,18 @@ class TestTheInternetPageFirefox:
             amount_of_content_shown = len(self.page.infinite_scroll_content())
 
 
-
     # Inputs
 
-    # JQuery UI Menus--TODO--
+
+    # JQuery UI Menus
+    def test_jquery_ui_menus(self):
+        link_text = "JQuery UI Menus"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        actions = ActionChains(self.page.browser)
+        actions.move_to_element(self.page.jquery_ui_menus_enabled_item()).pause(0.5)
+        actions.move_to_element(self.page.jquery_ui_menus_back_to_jquery_ui_item()).click().perform()
+        sleep(0.5)
+        assert self.page.browser.current_url == self.PROTOCOL + self.BASEURL + "/jqueryui", "Couldn't navigate to /jqueryui page"
 
 
     # JavaScript Alerts
@@ -274,7 +273,6 @@ class TestTheInternetPageFirefox:
             assert self.page.javascript_alerts_result() == "You successfully clicked an alert", "The correct result message wasn't shown"
         except:
             assert False, "Alert wasn't found"
-
 
     def test_javascript_confirm(self):
         link_text = "JavaScript Alerts"
@@ -308,7 +306,7 @@ class TestTheInternetPageFirefox:
     # JavaScript onload event error
 
 
-    # Key Presses - TODO parametrize
+    # Key Presses
     @pytest.mark.parametrize("input, result",[("abc", "C"),
                                               (Keys.BACK_SPACE, "BACK_SPACE"),
                                               (Keys.ARROW_LEFT, "LEFT"),
@@ -323,6 +321,10 @@ class TestTheInternetPageFirefox:
 
 
     # Large & Deep DOM
+    def test_large_deep_dom(self):
+        link_text = "Large & Deep DOM"
+        self.page.main_links()[1][self.page.main_links()[0].index(link_text)].click()
+        assert self.page.large_deep_dom_412_div().text == "41.2", "Couldn't locate div 41.2"
 
 
     # Multiple Windows

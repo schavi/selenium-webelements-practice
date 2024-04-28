@@ -217,7 +217,13 @@ class TheInternetPage(GeneralPage):
 
     # Inputs
 
-    # JQuery UI Menus--TODO--
+
+    # JQuery UI Menus
+    def jquery_ui_menus_enabled_item(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//ul[@id='menu']/li[2]")
+        
+    def jquery_ui_menus_back_to_jquery_ui_item(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//ul[@id='menu']/li[2]/ul/li[2]")
 
 
     # JavaScript Alerts
@@ -247,6 +253,9 @@ class TheInternetPage(GeneralPage):
     
 
     # Large & Deep DOM
+    # This is just to test the usage of XPath axes
+    def large_deep_dom_412_div(self) -> WebElement:
+        return self.browser.find_element(By.XPATH, "//div[@id='sibling-45.2']//ancestor::div[5]//child::div[1]")
 
 
     # Multiple Windows
