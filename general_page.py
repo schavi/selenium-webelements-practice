@@ -34,7 +34,7 @@ class GeneralPage:
 
     def open(self):
         self.browser.get(self.url)
-        self.browser.set_window_size(1920, 1080)    # ez a chrome-nak kell, nem jo neki a maximize_window()
+        self.browser.set_window_size(1920, 1080)
         self.browser.maximize_window()
 
     def close(self):
