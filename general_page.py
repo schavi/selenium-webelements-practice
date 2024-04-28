@@ -38,7 +38,7 @@ class GeneralPage:
         self.browser.maximize_window()
 
     def close(self):
-        self.browser.close()
+        self.browser.quit()
 
     def refresh(self):
         self.browser.refresh()
